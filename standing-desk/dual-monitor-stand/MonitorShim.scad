@@ -12,7 +12,7 @@ shim_radius=shim_diameter/2;
 3 mm height(2)
 */
 bracket_span=88.5;
-table_span=2.54*10;
+table_span=2.54*10; // the desk plane is 1 inch think
 shim_height=bracket_span-table_span;
 
 // hollow_ratio=1/16;
