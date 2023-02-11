@@ -1,5 +1,6 @@
-// $fn=360;
-$fn=180;
+$fn=36; // switch to $fn=360 for final render
+
+debug=false;
 
 segment_height=50; // verified
 
@@ -13,7 +14,7 @@ outer_radius_bump=(
     ); // I want the new mount point to be oversized by 2mm in circumference so that the bracket fits more snugly
 outer_radius=outer_diameter/2+outer_radius_bump;
 
-if (false) {
+if (debug) {
     echo("base_outer_circumference", outer_diameter*pi);
     echo("base_outer_diameter", outer_diameter);
     echo("base_outer_radius", outer_diameter/2);
@@ -26,12 +27,12 @@ if (false) {
 
 inner_diameter=32.5; // verified
 inner_radius_shrink=(
-    -1 /*mm*/
+    -0.5 /*mm*/
     / pi
     / 2 /* convert from diameter to radius */
     ); // Shrink the new tab by 1mm in circumference so that it should fit in the existing pipe
 inner_radius=inner_diameter/2+inner_radius_shrink;
-if (false) {
+if (debug) {
     echo("base_inner_circumference", inner_diameter*pi);
     echo("base_inner_diameter", inner_diameter);
     echo("base_inner_radius", inner_diameter/2);
@@ -45,17 +46,7 @@ if (false) {
 bevel_radius=inner_radius/4;
 inset_radius=7.5;
 
-inner_height_ratio=1;
-
-// lip_height=3;
-// lip_radius=outer_radius+3;
-
-// module lipped_extension() {
-//     translate([0,0,0]) cylinder(2*segment_height, inner_radius, inner_radius);
-//     translate([0,0,2*segment_height]) cylinder(lip_height, lip_radius, lip_radius);
-//     translate([0,0,2*segment_height+lip_height]) cylinder(segment_height, outer_radius, outer_radius);
-// }
-//lipped_extension();
+inner_height_ratio=1; // increase this to 1.5 or 2 to increase the amount of in-pipe support. I went with the minimal filament setting.
 
 module extension() {
     difference() {
