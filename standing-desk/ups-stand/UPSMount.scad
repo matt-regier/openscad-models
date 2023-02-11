@@ -1,20 +1,8 @@
-module Base() {
-translate(v = [1, 0, 2])
-color("Pink")
-//roundedcube([4, 2, 2], false, 0.6, "zmax");   
-cube([4, 2, 2]);   
-}
-//Base();
+$fn=36; // set to 360 for final render
 
-//minkowski(3);
-//border=5;
-//minkowski(){
-//cube([10,20,5],center=false);
-//rotate([90,90,90]) cylinder(h=10,r=border);
-//cylinder(h=0.1,r=border);
-//}
+show_table_and_battery=false;
 
-$fn=32;
+// @thejollygrimreaper's https://www.youtube.com/watch?v=gKOkJWiTgAY
 module roundedTile(xdim, ydim, zdim, rdim) {
   hull() {
     translate([rdim,rdim,0]) cylinder(r=rdim,h=zdim);
@@ -25,6 +13,7 @@ module roundedTile(xdim, ydim, zdim, rdim) {
 };
 //roundedTile(20,20,10,3);
 
+// my extension of the concept
 module roundedCube(xdim, ydim, zdim, rdim) {
   hull() {
     translate([rdim,rdim,rdim]) sphere(r=rdim);
@@ -238,50 +227,13 @@ module openbucket() {
   }
 }
 
-table();
-battery();
+if (show_table_and_battery) {
+  table();
+  battery();
+}
 module mount() {
   bracket();
   translate([0,battery_depth-(bracket_thickness/2),0]) bracket();
   openbucket();
 }
 mount();
-
-
-// module testpole() {
-//   color("Black") {
-//       translate([bracket_thickness,bracket_thickness,table_foot_height+2*bracket_thickness])
-//         cube([battery_width,battery_depth,battery_height]);
-//   }
-// }
-module testpole() {
-  color("Red") {
-    roundedCube(
-      bracket_thickness,
-      35,
-      145,
-      radius
-    );
-  }
-}
-// translate([table_foot_width+2.5*bracket_thickness,bracket_thickness,table_foot_height+3.5*bracket_thickness]) testpole();
-// color("red") {
-//   roundedCube(
-//     bracket_thickness,
-//     35,
-//     145
-//   );
-// }
-
-module halfcylinder(h, r) {
-  difference() {
-    cylinder(h = h, r = r);
-    translate ([0,-r,0]) cube([2*r,2*r,h]);  
-  }
-}
-
-//translate([100,0,0]) linear_extrude(20) pieSlice(size=10, start_angle=0, end_angle=180);
-// translate([-30,0,0]) cylinder(h = 40, r = 3);
-// translate ([0,-10,0]) cube([10,20,50]);
-
-// translate ([-30,0,0]) halfcylinder(h = 100, r = 5);
