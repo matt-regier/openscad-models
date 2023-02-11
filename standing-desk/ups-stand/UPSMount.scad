@@ -43,8 +43,6 @@ battery_width=83+3;//test print done at 83
 battery_depth=146+1;//test print done at 146
 battery_height=245;//test print done at 245
 
-narrowface_depth=60;
-
 //print_height=(0.5*battery_height)+table_foot_height+bracket_thickness;
 //print_height=160;
 print_height=200+2.5*bracket_thickness;
@@ -113,26 +111,26 @@ module openbucket() {
     //   bucket_height,
     //   radius);
     roundedCube(
-      2.5*bracket_thickness,
+      2*bracket_thickness,
       bracket_thickness,
       bucket_height,
       radius);
     translate([battery_width-(bracket_thickness/2),0,0])
       roundedCube(
-        2.5*bracket_thickness,
+        2*bracket_thickness,
         bracket_thickness,
         bucket_height,
         radius);
     roundedCube(
       battery_width+bracket_thickness,
       bracket_thickness,
-      2.5*bracket_thickness,
+      2*bracket_thickness,
       radius);
-    translate([0,0,bucket_height-2.5*bracket_thickness])
+    translate([0,0,bucket_height-2*bracket_thickness])
       roundedCube(
         battery_width+bracket_thickness,
         bracket_thickness,
-        2.5*bracket_thickness,
+        2*bracket_thickness,
         radius);
   }  
   module solidface() {
@@ -143,74 +141,67 @@ module openbucket() {
     //   radius);
     roundedCube(
       bracket_thickness,
-      2.5*bracket_thickness,
+      2*bracket_thickness,
       bucket_height,
       radius);
     translate([0,battery_depth-(bracket_thickness/2),0])
       roundedCube(
         bracket_thickness,
-        2.5*bracket_thickness,
+        2*bracket_thickness,
         bucket_height,
         radius);
     roundedCube(
       bracket_thickness,
       battery_depth+2*bracket_thickness,
-      2.5*bracket_thickness,
+      2*bracket_thickness,
       radius);
-    translate([0,0,bucket_height-2.5*bracket_thickness])
+    translate([0,0,bucket_height-2*bracket_thickness])
       roundedCube(
         bracket_thickness,
         battery_depth+2*bracket_thickness,
-        2.5*bracket_thickness,
+        2*bracket_thickness,
         radius);
   }  
-  module narrowface() {
-  roundedCube(
-    bracket_thickness,
-    narrowface_depth,
-    bucket_height,
-    radius);
-  }
   module frontbracket() {
     roundedCube(
       bracket_thickness,
       battery_depth+2*bracket_thickness,
-      2.5*bracket_thickness,
+      2*bracket_thickness,
       radius);
 
     translate([-bracket_thickness,0,0])
       roundedCube(
         2*bracket_thickness,
         bracket_thickness,
-        2.5*bracket_thickness,
+        2*bracket_thickness,
         radius);
 
     translate([-bracket_thickness,battery_depth+bracket_thickness,0])
       roundedCube(
         2*bracket_thickness,
         bracket_thickness,
-        2.5*bracket_thickness,
+        2*bracket_thickness,
         radius);
 
-    translate([0,0,bucket_height-2.5*bracket_thickness]) {
-      roundedCube(
-        bracket_thickness,
-        battery_depth+2*bracket_thickness,
-        2.5*bracket_thickness,
-        radius
-      );
-    }
+    // translate([0,0,bucket_height-2*bracket_thickness]) {
+    //   roundedCube(
+    //     bracket_thickness,
+    //     battery_depth+2*bracket_thickness,
+    //     2*bracket_thickness,
+    //     radius
+    //   );
+    // }
   }
   module floor() {
     roundedCube(
-      2.5*bracket_thickness,
+      2*bracket_thickness,
       battery_depth+2*bracket_thickness,
       bracket_thickness,
       radius
     );
     translate([battery_width-(bracket_thickness/2),0,0])
       roundedCube(
-        2.5*bracket_thickness,
+        2*bracket_thickness,
         battery_depth+2*bracket_thickness,
         bracket_thickness,
         radius
@@ -222,7 +213,7 @@ module openbucket() {
     translate([0,battery_depth+bracket_thickness,0]) shortside();
     solidface();
     translate([battery_width+bracket_thickness,0,0]) frontbracket();
-    // translate([battery_width+bracket_thickness,((battery_depth+2*bracket_thickness)/2)-(narrowface_depth/2),0]) narrowface();
+    translate([battery_width+bracket_thickness,0,bucket_height-2*bracket_thickness]) frontbracket();
     floor();
   }
 }

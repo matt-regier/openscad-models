@@ -10,3 +10,6 @@ Because I also purchased the [FlexiSpot Height Adjustable Desk Leg Casters Wheel
 I considered using danielupshaw.com's roundedcube.scad but it was more powerful than I needed.
 Instead I used [@thejollygrimreaper](https://www.youtube.com/@thejollygrimreaper)'s [`hull` approach](https://www.youtube.com/watch?v=gKOkJWiTgAY).
 In `UPSMount.scad` I have this named as `roundedTile()` and have extended it to use spheres for rounding on all edges in `roundedCube()`.
+
+## caveat
+This is an "expensive" print. Even with the fact that the support material for the hollow sides is less filament than the standard 20% infill, this print ends up being about 3 parts print to 5 parts discardable supports. ~425g total on my rig.
