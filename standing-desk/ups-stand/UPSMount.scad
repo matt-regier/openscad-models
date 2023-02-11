@@ -39,9 +39,9 @@ module roundedCube(xdim, ydim, zdim, rdim) {
 };
 //roundedCube(40,30,20,2);
 
-table_foot_width=70;
-table_foot_depth=600;
-table_foot_height=20;
+table_foot_width=70+3;//test print done at 70
+table_foot_depth=600;//test print done at 600
+table_foot_height=20+3;//test print done at 20
 
 table_leg_width=50;
 table_leg_depth=80;
@@ -50,20 +50,20 @@ table_leg_height=900;
 bracket_thickness=10;
 
 radius=3;
-battery_width=83;
-battery_depth=146;
-battery_height=245;
+battery_width=83+3;//test print done at 83
+battery_depth=146+1;//test print done at 146
+battery_height=245;//test print done at 245
 battery_brace=170;
 
-print_height=250;
+print_height=250-1;
 
-echo("print_height",print_height);
+//echo("print_height",print_height);
 bracket_height=table_foot_height+2*bracket_thickness;
-echo("bracket_height",bracket_height);
+//echo("bracket_height",bracket_height);
 overlap_amount=bracket_thickness;
-echo("overlap_amount",overlap_amount);
+//echo("overlap_amount",overlap_amount);
 bucket_height=print_height-bracket_height+overlap_amount;
-echo("bucket_height",bucket_height);
+//echo("bucket_height",bucket_height);
 
 // echo("table_foot_width",table_foot_width);
 // echo("battery_width",battery_width);
@@ -183,11 +183,11 @@ module openbucket() {
   }
 }
 
-table();
-battery();
+//table();
+//battery();
 bracket();
 openbucket();
 
-translate([0,battery_depth*2,0]) battery();
-translate([0,battery_depth*2,0]) bracket();
-translate([0,battery_depth*2,0]) bucket();
+//translate([0,battery_depth*2,0]) battery();
+//translate([0,battery_depth*2,0]) bracket();
+//translate([0,battery_depth*2,0]) bucket();
