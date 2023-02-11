@@ -14,7 +14,7 @@ cube([4, 2, 2]);
 //cylinder(h=0.1,r=border);
 //}
 
-$fn=64;
+$fn=32;
 module roundedTile(xdim, ydim, zdim, rdim) {
   hull() {
     translate([rdim,rdim,0]) cylinder(r=rdim,h=zdim);
@@ -53,11 +53,13 @@ radius=3;
 battery_width=83+3;//test print done at 83
 battery_depth=146+1;//test print done at 146
 battery_height=245;//test print done at 245
-battery_brace=170;
 
-print_height=250-1;
+narrowface_depth=60;
 
-//echo("print_height",print_height);
+//print_height=(0.5*battery_height)+table_foot_height+bracket_thickness;
+//print_height=160;
+print_height=200+2.5*bracket_thickness;
+echo("print_height",print_height);
 bracket_height=table_foot_height+2*bracket_thickness;
 //echo("bracket_height",bracket_height);
 overlap_amount=bracket_thickness;
@@ -93,14 +95,16 @@ module bracket() {
   module bracketside() {
     roundedCube(
       bracket_thickness,
-      battery_depth+2*bracket_thickness,
+      //battery_depth+2*bracket_thickness,
+      2.5*bracket_thickness,
       table_foot_height+2*bracket_thickness,
       radius);
   }
   module bracketface() {
     roundedCube(
       table_foot_width+2*bracket_thickness,
-      battery_depth+2*bracket_thickness,
+      //battery_depth+2*bracket_thickness,
+      2.5*bracket_thickness,
       bracket_thickness,
       radius);
   }
@@ -112,82 +116,172 @@ module bracket() {
   }
 }
 
-module bucket() {
-  module longside() {
-    roundedCube(
-      battery_width+2*bracket_thickness,
-      bracket_thickness,
-      bucket_height,
-      radius);
-  }
-  module solidface() {
-    roundedCube(
-      bracket_thickness,
-      battery_depth+2*bracket_thickness,
-      bucket_height,
-      radius);
-  }  
-  color("Red") {
-    translate([0,0,table_foot_height+bracket_thickness]) {
-      longside();
-      translate([0,battery_depth+bracket_thickness,0]) longside();
-      solidface();
-      translate([battery_width+bracket_thickness,0,0]) solidface();
-    }
-  }
-}
-
 module openbucket() {
   module shortside() {
+    // roundedCube(
+    //   battery_width+bracket_thickness,
+    //   bracket_thickness,
+    //   bucket_height,
+    //   radius);
+    roundedCube(
+      2.5*bracket_thickness,
+      bracket_thickness,
+      bucket_height,
+      radius);
+    translate([battery_width-(bracket_thickness/2),0,0])
+      roundedCube(
+        2.5*bracket_thickness,
+        bracket_thickness,
+        bucket_height,
+        radius);
     roundedCube(
       battery_width+bracket_thickness,
       bracket_thickness,
-      bucket_height,
+      2.5*bracket_thickness,
       radius);
+    translate([0,0,bucket_height-2.5*bracket_thickness])
+      roundedCube(
+        battery_width+bracket_thickness,
+        bracket_thickness,
+        2.5*bracket_thickness,
+        radius);
   }  
   module solidface() {
+    // roundedCube(
+    //   bracket_thickness,
+    //   battery_depth+2*bracket_thickness,
+    //   bucket_height,
+    //   radius);
+    roundedCube(
+      bracket_thickness,
+      2.5*bracket_thickness,
+      bucket_height,
+      radius);
+    translate([0,battery_depth-(bracket_thickness/2),0])
+      roundedCube(
+        bracket_thickness,
+        2.5*bracket_thickness,
+        bucket_height,
+        radius);
     roundedCube(
       bracket_thickness,
       battery_depth+2*bracket_thickness,
-      bucket_height,
+      2.5*bracket_thickness,
       radius);
+    translate([0,0,bucket_height-2.5*bracket_thickness])
+      roundedCube(
+        bracket_thickness,
+        battery_depth+2*bracket_thickness,
+        2.5*bracket_thickness,
+        radius);
+  }  
+  module narrowface() {
+  roundedCube(
+    bracket_thickness,
+    narrowface_depth,
+    bucket_height,
+    radius);
   }
   module frontbracket() {
     roundedCube(
       bracket_thickness,
       battery_depth+2*bracket_thickness,
-      2*bracket_thickness,
+      2.5*bracket_thickness,
       radius);
+
     translate([-bracket_thickness,0,0])
       roundedCube(
         2*bracket_thickness,
         bracket_thickness,
-        2*bracket_thickness,
+        2.5*bracket_thickness,
         radius);
+
     translate([-bracket_thickness,battery_depth+bracket_thickness,0])
       roundedCube(
         2*bracket_thickness,
         bracket_thickness,
-        2*bracket_thickness,
+        2.5*bracket_thickness,
         radius);
+
+    translate([0,0,bucket_height-2.5*bracket_thickness]) {
+      roundedCube(
+        bracket_thickness,
+        battery_depth+2*bracket_thickness,
+        2.5*bracket_thickness,
+        radius
+      );
+    }
+  }
+  module floor() {
+    roundedCube(
+      2.5*bracket_thickness,
+      battery_depth+2*bracket_thickness,
+      bracket_thickness,
+      radius
+    );
+    translate([battery_width-(bracket_thickness/2),0,0])
+      roundedCube(
+        2.5*bracket_thickness,
+        battery_depth+2*bracket_thickness,
+        bracket_thickness,
+        radius
+      );
   }
   
-  color("Yellow") {
-    translate([0,0,table_foot_height+bracket_thickness]) {
-      shortside();
-      translate([0,battery_depth+bracket_thickness,0]) shortside();
-      solidface();
-      translate([battery_width+bracket_thickness,0,0]) frontbracket();
-      translate([battery_width+bracket_thickness,0,battery_brace]) frontbracket();
-    }
+  translate([0,0,table_foot_height+bracket_thickness]) {
+    shortside();
+    translate([0,battery_depth+bracket_thickness,0]) shortside();
+    solidface();
+    translate([battery_width+bracket_thickness,0,0]) frontbracket();
+    // translate([battery_width+bracket_thickness,((battery_depth+2*bracket_thickness)/2)-(narrowface_depth/2),0]) narrowface();
+    floor();
   }
 }
 
-//table();
-//battery();
-bracket();
-openbucket();
+table();
+battery();
+module mount() {
+  bracket();
+  translate([0,battery_depth-(bracket_thickness/2),0]) bracket();
+  openbucket();
+}
+mount();
 
-//translate([0,battery_depth*2,0]) battery();
-//translate([0,battery_depth*2,0]) bracket();
-//translate([0,battery_depth*2,0]) bucket();
+
+// module testpole() {
+//   color("Black") {
+//       translate([bracket_thickness,bracket_thickness,table_foot_height+2*bracket_thickness])
+//         cube([battery_width,battery_depth,battery_height]);
+//   }
+// }
+module testpole() {
+  color("Red") {
+    roundedCube(
+      bracket_thickness,
+      35,
+      145,
+      radius
+    );
+  }
+}
+// translate([table_foot_width+2.5*bracket_thickness,bracket_thickness,table_foot_height+3.5*bracket_thickness]) testpole();
+// color("red") {
+//   roundedCube(
+//     bracket_thickness,
+//     35,
+//     145
+//   );
+// }
+
+module halfcylinder(h, r) {
+  difference() {
+    cylinder(h = h, r = r);
+    translate ([0,-r,0]) cube([2*r,2*r,h]);  
+  }
+}
+
+//translate([100,0,0]) linear_extrude(20) pieSlice(size=10, start_angle=0, end_angle=180);
+// translate([-30,0,0]) cylinder(h = 40, r = 3);
+// translate ([0,-10,0]) cube([10,20,50]);
+
+// translate ([-30,0,0]) halfcylinder(h = 100, r = 5);
