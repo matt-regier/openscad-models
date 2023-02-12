@@ -28,10 +28,12 @@ knob_diameter=60;
 knob_radius=knob_diameter/2;
 knob_height=25;
 spacing=2;
-thickness=10;
+thickness=8;
 radius=3;
 open_height=knob_height;
-connect_height=open_height+0/*radius*/+10;
+connect_spacing=open_height+10;
+connect_height=connect_spacing+10;
+link_height=desk_mount_height+2*thickness;
 
 module table() {
 
@@ -49,16 +51,39 @@ if (showTable) {
   translate([thickness+spacing,-40,150]) table();
 }
 
+l_width=desk_mount_width+2*spacing+2*thickness;
 module repeatableL() {
-  l_width=desk_mount_width+2*spacing+2*thickness;
   roundedCube(l_width,thickness,thickness,radius);
   translate([thickness,0,0]) rotate([0,-90,0]) roundedCube(open_height,thickness,thickness,radius);
   translate([l_width,0,0]) rotate([0,-90,0]) roundedCube(connect_height,thickness,thickness,radius);
 }
+module flippedL() {
+  translate([l_width,0,0]) mirror([1,0,0]) repeatableL();
+}
+module chainLink() {
+  module topBar() {
+    translate([0,0,thickness+desk_mount_height+spacing]) roundedCube(l_width,thickness,thickness,radius);
+  }
+  down_shift=2*thickness+desk_mount_height+spacing;
+  module rung() {
+    roundedCube(l_width,thickness,thickness,radius); // bottom bar
+    roundedCube(thickness,thickness,down_shift,radius); // left side
+    translate([desk_mount_width+2*spacing+thickness,0,0]) roundedCube(thickness,thickness,down_shift,radius); // right side
+  }
+  topBar();
+  rung();
+  translate([0,0,-down_shift+thickness]) rung();
+  translate([0,0,2*(-down_shift+thickness)]) rung();
+}
 
 module mount() {
   color("Red") {
-    repeatableL();
+    // translate([0,0,connect_spacing*0]) repeatableL();
+    // translate([0,0,connect_spacing*1]) flippedL();
+    // translate([0,0,connect_spacing*2]) repeatableL();
+    // translate([0,0,connect_spacing*3]) flippedL();
+    translate([0,0,connect_spacing*2+5]) repeatableL();
+    translate([0,0,connect_spacing*4]) chainLink();
   }
 }
 mount();
