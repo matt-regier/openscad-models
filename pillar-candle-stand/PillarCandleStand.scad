@@ -1,62 +1,71 @@
-$fn=180;
-echo(version=version());
+// https://openhome.cc/eGossip/OpenSCAD/BezierCurve.html
+$fn=16;
 
-show3d=false;
-debug=true;
-showCandle=false;
+function bezier_coordinate(t, n0, n1, n2, n3) = 
+    n0 * pow((1 - t), 3) + 3 * n1 * t * pow((1 - t), 2) + 3 * n2 * pow(t, 2) * (1 - t) + n3 * pow(t, 3);
 
-candle_height=9*2.54*10;
-candle_diameter=74.5-2;
-candle_radius=candle_diameter/2;
-candle_radius_with_spacing=candle_radius+1;
-if (debug) {
-  echo("candle_radius_with_spacing", candle_radius_with_spacing);
+function bezier_point(t, p0, p1, p2, p3) = 
+    [
+        bezier_coordinate(t, p0[0], p1[0], p2[0], p3[0]),
+        bezier_coordinate(t, p0[1], p1[1], p2[1], p3[1]),
+        bezier_coordinate(t, p0[2], p1[2], p2[2], p3[2])
+    ];
+
+
+function bezier_curve(t_step, p0, p1, p2, p3) = 
+    [for(t = [0: t_step: 1 + t_step]) bezier_point(t, p0, p1, p2, p3)];
+
+// cap_round=true;
+// module line(point1, point2, width = 1, cap_round = true) {
+//     angle = 90 - atan((point2[1] - point1[1]) / (point2[0] - point1[0]));
+//     offset_x = 0.5 * width * cos(angle);
+//     offset_y = 0.5 * width * sin(angle);
+
+//     offset1 = [-offset_x, offset_y];
+//     offset2 = [offset_x, -offset_y];
+
+//     if(cap_round) {
+//         translate(point1) circle(d = width, $fn = 24);
+//         translate(point2) circle(d = width, $fn = 24);
+//     }
+
+//     polygon(points=[
+//         point1 + offset1, point2 + offset1,  
+//         point2 + offset2, point1 + offset2
+//     ]);
+// }
+
+// module polyline(points, width = 1) {
+//     module polyline_inner(points, index) {
+//         if(index < len(points)) {
+//             line(points[index - 1], points[index], width);
+//             polyline_inner(points, index + 1);
+//         }
+//     }
+
+//     polyline_inner(points, 1);
+// }
+
+t_step = 0.05;
+// width = 2;
+
+p0 = [0, 0, 0];
+p1 = [40, 60, 0];
+p2 = [-50, 90, 0];
+p3 = [0, 200, 0];
+
+some_points = bezier_curve(t_step, 
+    p0, p1, p2, p3
+);
+
+echo("some_points", some_points);
+
+for(point = some_points) {
+    echo("point", point);
+    color("red")
+    translate(point)
+    sphere(1);
 }
 
-module CreateLayer(radius, offset, height, zbase) {
-  translate([0,zbase,0] ) {
-    intersection() {
-      translate([offset,0,0]) circle(radius);
-      translate([0,-height/2,0]) square([100000, height]);
-    }
-  }
-}
 
-module CandleBase() {
-  // rotate_extrude() {
-    //layer_elevation=45;
-    // translate([candle_radius_with_spacing+5/2,layer_elevation]) circle(5/2);
-
-CreateLayer(radius=5, offset=40, height=10, zbase=0);
-CreateLayer(radius=5, offset=30, height=10, zbase=10);
-CreateLayer(radius=75, offset=-65, height=10, zbase=20);
-  
-    // translate([15, 0]) square(5);
-    // polygon( points=[
-    //   [2,0],
-    //   [4,0],
-    //   [4,4],
-    //   [2,4]
-    // ] );
-
-
-  // }
-}
-
-if (show3d) {
-  if (showCandle) color("White") cylinder(candle_height, candle_radius, candle_radius);
-  rotate_extrude() CandleBase();
-} else
-{
-  CandleBase();
-}
-
-module AngleDemo() {
-color("cyan")
-  rotate_extrude(angle=90)
-    text("J");
-  rotate([0,0,180])
-    rotate_extrude(angle=-90)
-      text("M");
-}
-// translate([50,0,0]) AngleDemo();
+// polyline(points, width);
