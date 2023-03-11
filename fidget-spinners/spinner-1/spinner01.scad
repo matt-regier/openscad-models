@@ -1,6 +1,6 @@
 debug=false;
 echo("$fn", $fn);
-$fn=180; // increase for rotational smoothness
+$fn=36; // increase for rotational smoothness
 
 spinner_height=8;
 spinner_half_height=spinner_height/2;
