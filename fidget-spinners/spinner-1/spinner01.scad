@@ -1,4 +1,6 @@
 debug=false;
+echo("$fn", $fn);
+$fn=180; // increase for rotational smoothness
 
 spinner_height=8;
 spinner_half_height=spinner_height/2;
@@ -6,12 +8,9 @@ spinner_quarter_height=spinner_height/4;
 spinner_diameter=60;
 spinner_radius=spinner_diameter/2;
 
-housing_radius=8;
 bearing_outer_radius=6;
 bearing_inner_radius=4;
-// housing_radius=10;
-// bearing_outer_radius=8;
-// bearing_inner_radius=6;
+housing_radius=bearing_outer_radius+0.4;
 
 // function f(x) = (housing_radius + bearing_outer_radius) / 2;
 // function g() = (housing_radius + bearing_outer_radius) / 2;
@@ -53,16 +52,28 @@ module rim() {
     }
 }
 
+module ridges() {
+  grooves=36;
+  groove_radius=3;
+  groove_depth=1;
+  starting=0;
+  for (angle = [starting : 360 / grooves : 360]) {
+    rotate([0,0,angle]) translate([spinner_radius+groove_radius-groove_depth,0,0]) cylinder(h = spinner_height, r = groove_radius);
+  }
+}
+
 module housing() {
     cylinder(h=spinner_height, r1=housing_radius, r2=housing_radius);
 }
 
+fat_spoke_height=spinner_height*1.075;
+fat_spoke_midpoint=fat_spoke_height/2;
 FatSpokePoints = [
-  [spinner_half_height, spokeStart(), 0], // 0 bottom-right
-  [-spinner_half_height, spokeStart(), 0], // 1 bottom-left
-  [0, spinner_radius, spinner_half_height], // 2 apex
-  [spinner_half_height, spokeStart(), spinner_height], // 3 top-right
-  [-spinner_half_height, spokeStart(), spinner_height] // 4 top-left
+  [fat_spoke_midpoint, spokeStart(), 0], // 0 bottom-right
+  [-fat_spoke_midpoint, spokeStart(), 0], // 1 bottom-left
+  [0, spinner_radius, fat_spoke_midpoint], // 2 apex
+  [fat_spoke_midpoint, spokeStart(), fat_spoke_height], // 3 top-right
+  [-fat_spoke_midpoint, spokeStart(), fat_spoke_height] // 4 top-left
 ];
 FatSpokeFaces = [
   [0,2,1],  // bottom
@@ -84,7 +95,7 @@ module fatSpokes() {
   spokes=4;
   starting=0;
   for (angle = [starting : 360 / spokes : 360]) {
-    rotate([0,0,angle]) translate([0,0,0]) polyhedron(points=FatSpokePoints, faces=FatSpokeFaces);
+    rotate([0,0,angle]) polyhedron(points=FatSpokePoints, faces=FatSpokeFaces);
   }
 }
 
@@ -118,7 +129,7 @@ module thinSpokes() {
   // spokes=8;
   // starting=360/16;
   for (angle = [starting : 360 / spokes : 360]) {
-    rotate([0,0,angle]) translate([0,0,0]) polyhedron(points=ThinSpokePoints, faces=ThinSpokeFaces);
+    rotate([0,0,angle]) polyhedron(points=ThinSpokePoints, faces=ThinSpokeFaces);
   }
 }
 
@@ -132,9 +143,11 @@ module spinner_positives() {
 }
 
 module spinner_negatives() {
-  // ridges();
+  ridges();
   bearingNegative();
 }
+// ridges();
+// bearingNegative();
 
 module spinner() {
   difference() {
@@ -143,6 +156,4 @@ module spinner() {
   }
 }
 spinner();
-
 // bearing();
-// bearingNegative();
