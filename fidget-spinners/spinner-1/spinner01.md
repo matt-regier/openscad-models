@@ -39,4 +39,24 @@ Total rendering time: 0:13:24.494
    Facets:     235034
    Volumes:         2
 Rendering finished.
+STL export finished: spinner01_MAINFLOOR.stl
+
+Parsing design (AST generation)...
+Compiling design (CSG Tree generation)...
+Rendering Polygon Mesh using CGAL...
+Geometries in cache: 133
+Geometry cache size in bytes: 24468968
+CGAL Polyhedrons in cache: 6
+CGAL cache size in bytes: 91747248
+Total rendering time: 0:27:55.241
+   Top level object is a 3D object:
+   Simple:        yes
+   Vertices:   137064
+   Halfedges:  744256
+   Edges:      372128
+   Halffacets: 470068
+   Facets:     235034
+   Volumes:         2
+Rendering finished.
+STL export finished: spinner01_BASEMENT.stl
 ```
