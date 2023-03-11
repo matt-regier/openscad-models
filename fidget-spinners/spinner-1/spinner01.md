@@ -18,3 +18,25 @@
 - https://github.com/openscad/openscad/issues/4039
 - https://openscad.org/cheatsheet/index.html?version=2021.01
 - https://www.reddit.com/r/openscad/comments/r72339/union_of_differences_error_the_given_mesh_is_not/
+
+## Render Stats
+
+```
+Parsing design (AST generation)...
+Compiling design (CSG Tree generation)...
+Rendering Polygon Mesh using CGAL...
+Geometries in cache: 87
+Geometry cache size in bytes: 26305272
+CGAL Polyhedrons in cache: 5
+CGAL cache size in bytes: 89811168
+Total rendering time: 0:13:24.494
+   Top level object is a 3D object:
+   Simple:        yes
+   Vertices:   137064
+   Halfedges:  744256
+   Edges:      372128
+   Halffacets: 470068
+   Facets:     235034
+   Volumes:         2
+Rendering finished.
+```

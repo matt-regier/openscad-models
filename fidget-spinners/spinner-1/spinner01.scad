@@ -1,4 +1,4 @@
-// $fn = 180; // increase for rotational smoothness
+//$fn = 360; // increase for rotational smoothness
 
 nozzle_diameter = 0.4;
 walls = 4;
@@ -40,7 +40,7 @@ module ridges() {
   color("green") {
     grooves = 48;
     groove_radius = 3;
-    groove_depth = 1;
+    groove_depth = 0.75;
     starting = 0;
     for (angle = [starting : 360 / grooves : 360]) {
       rotate([0,0,angle]) translate([spinner_radius+groove_radius-groove_depth,0,0]) cylinder(h = spinner_height, r = groove_radius);
