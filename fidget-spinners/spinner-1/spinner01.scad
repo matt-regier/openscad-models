@@ -9,7 +9,7 @@ spinner_quarter_height = spinner_height/4;
 spinner_diameter = spinner_height*10;
 spinner_radius = spinner_diameter/2;
 
-bearing_outer_diameter = 21.8;
+bearing_outer_diameter = 21.9;
 bearing_inner_diameter = 8;
 bearing_outer_radius = bearing_outer_diameter/2;
 bearing_inner_radius = bearing_inner_diameter/2;
