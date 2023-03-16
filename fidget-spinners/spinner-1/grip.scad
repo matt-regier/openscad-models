@@ -2,18 +2,21 @@
 
 edge_radius=1;
 
-grip_diameter=25;
+nozzle_diameter=0.4;
+walls=4;
+
+grip_diameter=25-(nozzle_diameter*walls*2);
 grip_radius=grip_diameter/2;
 thumbprint=50;
 
 bushing_diameter=12;
 bushing_radius=bushing_diameter/2;
-bushing_height=0.6;
+bushing_height=1;
 
 bearing_inner_diameter=8;
 bearing_inner_radius=bearing_inner_diameter/2;
 
-tab_diameter=bearing_inner_diameter/2;
+tab_diameter=bearing_inner_diameter*3/4;//*1/2;
 tab_radius=tab_diameter/2;
 
 post_height=7.2;
@@ -31,7 +34,7 @@ module grip_disc() {
       translate([grip_radius-edge_radius,edge_radius,0]) circle(r=edge_radius);
       square([grip_radius-edge_radius,edge_radius*2]);
     }
-    indent();
+    //indent();
   }
 }
 
