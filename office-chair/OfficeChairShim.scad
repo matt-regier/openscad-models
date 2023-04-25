@@ -13,11 +13,12 @@ if (debug) {
     echo(outside_bottom_y=outside_bottom_y);
 }
 
-inside_bottom_diameter=40.5;
+gap=1;
+inside_bottom_diameter=40.5+gap;
 inside_bottom_x = inside_bottom_diameter/2;
 inside_bottom_y = 0;
 
-inside_top_diameter = 40.5;
+inside_top_diameter = 40.5+gap;
 inside_top_x = inside_top_diameter/2;
 inside_top_y = 62;
 
@@ -40,6 +41,15 @@ module ChairShim() {
             ] );
     color("blue")
         rotate_extrude()
-            translate([inside_top_x,62,0]) square([5,10]);
+            // translate([inside_top_x,62,0])
+            //     square([5,10]);
+            translate([outside_top_x-5,62,0]) 
+                polygon( points=[
+                    [0.0, 0.0],
+                    [0.0, 5.0],
+                    [3.5, 10.0],
+                    [5.0, 10.0],
+                    [5.0, 0.0]
+                ] );
     }
 ChairShim();
