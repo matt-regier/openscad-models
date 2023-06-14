@@ -1,20 +1,20 @@
 debug=true;
 
-shaft_depth=200;
-shaft_inner_diameter=2.0*2.54*10;
-shaft_outer_diameter=2.5*2.54*10;
+shaft_depth=80;
+shaft_inner_diameter=52;//2.0*2.54*10;
+shaft_outer_diameter=65;//2.5*2.54*10;
 shaft_thickness=(shaft_outer_diameter-shaft_inner_diameter)/2;
 
 lip_inner_diameter=shaft_outer_diameter;
-lip_outer_diameter=3.0*2.54*10;
-lip_depth=10;
+lip_outer_diameter=76;//3.0*2.54*10;
+lip_depth=18;//10;
 lip_thickness=(lip_outer_diameter-lip_inner_diameter)/2;
 
-bolt_diameter=15;
+bolt_diameter=16;//15;
 bolt_length=300;
 bolt_radius=bolt_diameter/2;
-bolt1_depth=30+bolt_radius;
-bolt2_depth=60+bolt_radius;
+// bolt1_depth=30+bolt_radius;
+bolt2_depth=55+bolt_radius;
 
 plate_height=10;
 
