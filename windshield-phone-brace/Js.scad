@@ -1,5 +1,6 @@
 $fn=36; // set to 360 for final render
 
+debug=true;
 show_mount=true;
 
 // my extension of the concept
@@ -36,20 +37,38 @@ outer_shaft_width=29.6;
 outer_shaft_height=20.2;
 outer_shaft_depth=55;
 outer_lip_depth=3.6;
+outer_shaft_height_offset=(outer_shaft_height-inner_shaft_height)/2;
+joint_depth=34;
+joint_circumference=26;
+joint_radius=joint_circumference/2;
+if (debug){
+  echo("inner_shaft_width", inner_shaft_width);
+  echo("inner_shaft_height", inner_shaft_height);
+  echo("inner_shaft_depth", inner_shaft_depth);
+  echo("outer_shaft_width", outer_shaft_width);
+  echo("outer_shaft_height", outer_shaft_height);
+  echo("outer_shaft_depth", outer_shaft_depth);
+  echo("outer_lip_depth", outer_lip_depth);
+  echo("outer_shaft_height_offset", outer_shaft_height_offset);
+  echo("joint_depth", joint_depth);
+  echo("joint_circumference", joint_circumference);
+  echo("joint_radius", joint_radius);
+}
 
 module mount() {
+  // inner shaft
   translate([-inner_shaft_width/2,0,0]) 
-  {
     cube([inner_shaft_width,inner_shaft_depth,inner_shaft_height]);
-  }
-  translate([-outer_shaft_width/2,outer_shaft_depth*3/4,0]) 
-  {
+  // outer shaft
+  translate([-outer_shaft_width/2,outer_shaft_depth*3/4,-outer_shaft_height_offset]) 
     cube([outer_shaft_width,outer_shaft_depth,outer_shaft_height]);
-  }
-  translate([-outer_shaft_width/2,-outer_lip_depth,0]) 
-  {
+  // outer front lip
+  translate([-outer_shaft_width/2,-outer_lip_depth,-outer_shaft_height_offset]) 
     cube([outer_shaft_width,outer_lip_depth,outer_shaft_height]);
-  }
+  // ball joint placeholder
+  translate([0,-outer_lip_depth,inner_shaft_height/2])
+    rotate([90,0,0])
+      cylinder(h = joint_depth, r = joint_radius);
     //cube([outer_shaft_width,outer_shaft_depth,outer_shaft_height]);
   //   translate([bracket_thickness+half_width_delta,-1/8*table_foot_depth,bracket_thickness]) {
   //   color("Blue") {
