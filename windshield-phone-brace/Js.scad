@@ -1,6 +1,6 @@
 $fn=36; // set to 360 for final render
 
-debug=true;
+debug=false;
 show_mount=true;
 
 // @thejollygrimreaper's https://www.youtube.com/watch?v=gKOkJWiTgAY
@@ -38,14 +38,18 @@ outer_shaft_depth=55;
 outer_lip_depth=3.6;
 outer_shaft_height_offset=(outer_shaft_height-inner_shaft_height)/2;
 joint_depth=38;
-joint_circumference=26;
-joint_radius=joint_circumference/2;
+joint_diameter=26;
+joint_radius=joint_diameter/2;
 back_plate_width=38;
 back_plate_height=76;
 back_plate_depth=10;
 front_plate_width=58;
 front_plate_height=96;
 front_plate_depth=10;
+coil_housing_diameter=28;
+coil_housing_radius=coil_housing_diameter/2;
+coil_housing_depth=15;
+coil_housing_height=33.5;
 
 if (debug){
   echo("inner_shaft_width", inner_shaft_width);
@@ -57,7 +61,7 @@ if (debug){
   echo("outer_lip_depth", outer_lip_depth);
   echo("outer_shaft_height_offset", outer_shaft_height_offset);
   echo("joint_depth", joint_depth);
-  echo("joint_circumference", joint_circumference);
+  echo("joint_diameter", joint_diameter);
   echo("joint_radius", joint_radius);
   echo("back_plate_width", back_plate_width);
   echo("back_plate_height", back_plate_height);
@@ -65,6 +69,10 @@ if (debug){
   echo("front_plate_width", front_plate_width);
   echo("front_plate_height", front_plate_height);
   echo("front_plate_depth", front_plate_depth);
+  echo("coil_housing_diameter", coil_housing_diameter);
+  echo("coil_housing_radius", coil_housing_radius);
+  echo("coil_housing_depth", coil_housing_depth);
+  echo("coil_housing_height", coil_housing_height);
 }
 
 module mount() {
@@ -93,7 +101,16 @@ module mount() {
   translate([-front_plate_width/2,offset3,-front_plate_height*11/16])
     rotate([90,0,0])
       roundedTile(front_plate_width, front_plate_height, front_plate_depth, edge_radius);
+  // coil housing
+  translate([0,offset2+coil_housing_depth,-20.5-4.5])
+    rotate([90,0,0])
+      union() {
+        cylinder(h = coil_housing_depth, r = coil_housing_radius);
+        translate([0,coil_housing_depth-coil_housing_diameter,0])
+          cylinder(h = coil_housing_depth, r = coil_housing_radius);
+      }
 }
+
 
 // module bracket() {
 //   module bracketside() {
