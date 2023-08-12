@@ -1,6 +1,6 @@
 $fn=36; // set to 360 for final render
 
-debug=false;
+debug=true;
 show_mount=true;
 
 // @thejollygrimreaper's https://www.youtube.com/watch?v=gKOkJWiTgAY
@@ -26,7 +26,6 @@ module roundedCube(xdim, ydim, zdim, rdim) {
   }
 };
 
-bracket_thickness=10;
 edge_radius=1;
 
 inner_shaft_width=22.2;
@@ -102,7 +101,7 @@ module mount() {
     rotate([90,0,0])
       roundedTile(front_plate_width, front_plate_height, front_plate_depth, edge_radius);
   // coil housing
-  translate([0,offset2+coil_housing_depth,-20.5-4.5])
+  color("grey") translate([0,offset2+coil_housing_depth,-20.5-4.5])
     rotate([90,0,0])
       union() {
         cylinder(h = coil_housing_depth, r = coil_housing_radius);
@@ -111,37 +110,60 @@ module mount() {
       }
 }
 
+strut_thickness=5;
+top_plate_width=inner_shaft_width+2*strut_thickness;
+top_plate_depth=20; // made up value, gl;hf
+strut_depth=60; // made up value, gl;hf
+if (debug){
+  echo("strut_thickness", strut_thickness);
+  echo("top_plate_width", top_plate_width);
+}
+module mount_brace() {
+  module strut_plate() {
+    translate([-top_plate_width/2,0,0])
+      roundedCube(top_plate_width, top_plate_depth, strut_thickness, edge_radius);
+  }
+  // top plate
+  translate([0,0,inner_shaft_height]) strut_plate();
+  // mid plate
+  translate([0,0,-strut_thickness]) strut_plate();
+  // mid plate
+  translate([0,0,-strut_depth+inner_shaft_height+strut_thickness/2]) strut_plate();
+  module strut() {
+    translate([-strut_thickness/2,0,-strut_depth+inner_shaft_height+strut_thickness])
+      roundedCube(strut_thickness, top_plate_depth, strut_depth, edge_radius);
+  }
+  // left strut
+  translate([-inner_shaft_width/2-strut_thickness/2, 0, 0]) strut();
+  // right strut
+  translate([inner_shaft_width/2+strut_thickness/2, 0, 0]) strut();
+  
 
-// module bracket() {
-//   module bracketside() {
+//   module strutside() {
 //     roundedCube(
-//       bracket_thickness,
-//       //battery_depth+2*bracket_thickness,
-//       2.5*bracket_thickness,
-//       table_foot_height+2*bracket_thickness,
+//       strut_thickness,
+//       //battery_depth+2*strut_thickness,
+//       2.5*strut_thickness,
+//       table_foot_height+2*strut_thickness,
 //       radius);
 //   }
-//   module bracketface() {
+//   module strutface() {
 //     roundedCube(
-//       table_foot_width+2*bracket_thickness,
-//       //battery_depth+2*bracket_thickness,
-//       2.5*bracket_thickness,
-//       bracket_thickness,
+//       table_foot_width+2*strut_thickness,
+//       //battery_depth+2*strut_thickness,
+//       2.5*strut_thickness,
+//       strut_thickness,
 //       radius);
 //   }
 //   /*translate([half_width_delta,0,0])*/{
-//     bracketside();
-//     translate([bracket_thickness+table_foot_width,0,0]) bracketside();
-//     bracketface();
-//     translate([0,0,bracket_thickness+table_foot_height]) bracketface();
+//     strutside();
+//     translate([strut_thickness+table_foot_width,0,0]) strutside();
+//     strutface();
+//     translate([0,0,strut_thickness+table_foot_height]) strutface();
 //   }
-// }
+}
 
 if (show_mount) {
   mount();
 }
-module brace() {
-  //bracket();
-}
-brace();
-//cube([inner_shaft_width,inner_shaft_depth,inner_shaft_height]);
+mount_brace();
