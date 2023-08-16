@@ -1,7 +1,7 @@
 $fn=36; // set to 360 for final render
 
 debug=false;
-show_mount=true;
+buffer=0.4;
 
 // @thejollygrimreaper's https://www.youtube.com/watch?v=gKOkJWiTgAY
 module roundedTile(xdim, ydim, zdim, rdim) {
@@ -28,7 +28,7 @@ module roundedCube(xdim, ydim, zdim, rdim) {
 
 edge_radius=1;
 
-inner_shaft_width=22.2;
+inner_shaft_width=22.2+buffer;
 inner_shaft_height=12.6;
 inner_shaft_depth=55;
 outer_shaft_width=29.6;
@@ -45,7 +45,7 @@ back_plate_depth=10;
 front_plate_width=58;
 front_plate_height=96;
 front_plate_depth=10;
-coil_housing_diameter=28;
+coil_housing_diameter=28+buffer;
 coil_housing_radius=coil_housing_diameter/2;
 coil_housing_depth=15;
 coil_housing_height=33.5;
@@ -188,10 +188,8 @@ module mount_brace() {
   cross();
 }
 
-if (show_mount) {
-  color("gray") mount();
-}
-color("blue") mount_brace();
+//mount();
+mount_brace();
 
 // test no overlap between mount and brace
 // intersection() {
