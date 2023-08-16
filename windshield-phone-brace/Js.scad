@@ -1,6 +1,6 @@
 $fn=36; // set to 360 for final render
 
-debug=true;
+debug=false;
 show_mount=true;
 
 // @thejollygrimreaper's https://www.youtube.com/watch?v=gKOkJWiTgAY
@@ -101,7 +101,7 @@ module mount() {
     rotate([90, 0, 0])
       roundedTile(front_plate_width, front_plate_height, front_plate_depth, edge_radius);
   // coil housing
-  color("grey") translate([0,offset2+coil_housing_depth,-20.5-4.5])
+  translate([0,offset2+coil_housing_depth,-20.5-4.5])
     rotate([90, 0, 0])
       union() {
         cylinder(h = coil_housing_depth, r = coil_housing_radius);
@@ -114,8 +114,7 @@ strut_thickness=5;
 top_plate_width=inner_shaft_width+2*strut_thickness;
 top_plate_depth=25; // made up value, gl;hf
 strut_height=60; // made up value, gl;hf
-arm_width=strut_thickness;
-arm_height=top_plate_depth; // made up transitively
+arm_height=top_plate_depth; // made up transitively (90 degree rotation width translation here)
 arm_depth=top_plate_depth+outer_lip_depth+joint_depth;
 
 if (debug) {
@@ -123,7 +122,7 @@ if (debug) {
   echo("top_plate_width", top_plate_width);
   echo("top_plate_depth", top_plate_depth);
   echo("strut_height", strut_height);
-  echo("arm_width", arm_width);
+  echo("strut_thickness", strut_thickness);
   echo("arm_height", arm_height);
   echo("arm_depth", arm_depth);
 }
@@ -132,35 +131,69 @@ module mount_brace() {
     translate([-top_plate_width/2, 0, 0])
       roundedCube(top_plate_width, top_plate_depth, strut_thickness, edge_radius);
   }
-  // top plate
-  translate([0,0,inner_shaft_height]) strut_plate();
-  // mid plate
-  translate([0,0,-strut_thickness]) strut_plate();
-  // mid plate
-  translate([0,0,-strut_height+inner_shaft_height+strut_thickness/2]) strut_plate();
+  module horizontal_plates () {
+    // top plate
+    translate([0,0,inner_shaft_height]) strut_plate();
+    // mid plate
+    translate([0,0,-strut_thickness]) strut_plate();
+    // mid plate
+    translate([0,0,-strut_height+inner_shaft_height+strut_thickness/2]) strut_plate();
+  }
+  horizontal_plates();
   module strut() {
     translate([-strut_thickness/2,0,-strut_height+inner_shaft_height+strut_thickness])
       roundedCube(strut_thickness, top_plate_depth, strut_height, edge_radius);
   }
-  // left strut
-  translate([-inner_shaft_width/2-strut_thickness/2, 0, 0]) strut();
-  // right strut
-  translate([inner_shaft_width/2+strut_thickness/2, 0, 0]) strut();
-  module arm() {
-    translate([-arm_width/2, -arm_depth+top_plate_depth, inner_shaft_height-strut_height+strut_thickness/2])
-      roundedCube(arm_width, arm_depth, arm_height, edge_radius);
+  module struts() {
+    // left strut
+    translate([-inner_shaft_width/2-strut_thickness/2, 0, 0]) strut();
+    // right strut
+    translate([inner_shaft_width/2+strut_thickness/2, 0, 0]) strut();
   }
-  // left arm
-  translate([-coil_housing_diameter/2-strut_thickness/2, 0, 0]) arm();
-  // left arm
-  translate([coil_housing_diameter/2+strut_thickness/2, 0, 0]) arm();
+  struts();
+  module arm() {
+    translate([-strut_thickness/2, -arm_depth+top_plate_depth, inner_shaft_height-strut_height+strut_thickness/2])
+      roundedCube(strut_thickness, arm_depth, arm_height, edge_radius);
+  }
+  module arms() {
+    // left arm
+    translate([-coil_housing_diameter/2-strut_thickness/2, 0, 0]) arm();
+    // left arm
+    translate([coil_housing_diameter/2+strut_thickness/2, 0, 0]) arm();
+  }
+  arms();
+  module cross() {
+    a=inner_shaft_width;
+    b=strut_height-inner_shaft_height-strut_thickness;
+    hypotenuse=sqrt(pow(a,2)+pow(b,2));
+    angle=atan(a/b);
+    if (debug) {
+      echo("a", a);
+      echo("b", b);
+      echo("hypotenuse", hypotenuse);
+      echo("angle", angle);
+    }
+    translate([0,0,-strut_thickness*1/4])
+      union() {
+        translate([-inner_shaft_width/2,0,0])
+          rotate([0,-angle-180,0]) 
+            translate([-strut_thickness/2,0,0])
+              roundedCube(strut_thickness, top_plate_depth, hypotenuse, edge_radius);
+        translate([inner_shaft_width/2,0,0])
+          rotate([0,angle-180,0]) 
+            translate([-strut_thickness/2,0,0])
+              roundedCube(strut_thickness, top_plate_depth, hypotenuse, edge_radius);
+      }
+  }
+  cross();
 }
 
 if (show_mount) {
-  mount();
+  color("gray") mount();
 }
-mount_brace();
+color("blue") mount_brace();
 
+// test no overlap between mount and brace
 // intersection() {
 //   mount();
 //   mount_brace();
